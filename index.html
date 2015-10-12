@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html ng-app="animationCreator">
+	<head>
+		<link rel="stylesheet" type="text/css" href="scripts/bootstrap.min.css" />
+		<script type="text/javascript" src="scripts/angular.min.js"></script>
+		<script type="text/javascript" src="scripts/app.js"></script>
+	</head>
+	<body ng-controller="AnimationController as ac">
+		<div class="image">
+			<h2>Filename:</h2>
+			<form ng-submit="ac.refreshImage()">
+				<input type="text" ng-model="ac.imageInput" placeholder="Enter a file name here">
+				<input class="btn-primary" type="submit" value="Refresh image">
+			</form>
+			<img ng-src={{ac.imagePath}} width="1280" height="720">
+		</div>
+		<div class="info">
+			<h2>Sprite sheet dimensions:</h2>
+		</div>
+		<div class="image properties">
+			<form ng-submit="ac.setDimensions()">
+				<table>
+					<tr>
+						<td>
+							Rows: {{ac.rows}} <input type="text" ng-model="ac.rowEntry" size="15" placeholder="Sprites in a row.">
+						</td>
+						<td>
+							<input class="btn-primary" type="submit" value="Set dimensions (requires reset: {{ac.rowEntry * ac.colEntry &lt; ac.entries.length}})">
+						</td>
+						<tr>
+							<td>
+								Columns: {{ac.cols}} <input type="text" ng-model="ac.colEntry" size="15" placeholder="Sprites in a column.">
+							</td>
+						</tr>
+					</tr>
+				</table>
+				
+				<p ng-show="ac.debug">Requires reset: {{ac.rowEntry * ac.colEntry &lt; ac.entries.length}}; {{ac.rowEntry}} * {{ac.colEntry}} &lt; {{ac.entries.length}}</p>
+			</form>
+			<hr>
+		</div>
+		<div ng-show="ac.entriesAvailable" class="animation entry"></div>
+	</body>
+</html>
