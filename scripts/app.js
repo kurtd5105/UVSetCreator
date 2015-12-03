@@ -3,7 +3,7 @@
 	var cols = 1;
 	var entriesAvailable = false;
 	var imagePath = "";
-	var entries = [{name:"test"}, {name:"test2"}];
+	var entries = [];
 	var app = angular.module('animationCreator', []);
 	app.controller('AnimationController', function(){
 		this.debug = true;
@@ -26,11 +26,21 @@
 			if(this.colEntry > 0){
 				this.cols = this.colEntry;
 			}
-			if(this.rows * this.cols < this.entries.length){
-				this.entries = [];
+			if(this.rowEntry > 0 && this.colEntry > 0){
+				if(this.entriesAvailable == false){
+					this.entriesAvailable = true;
+					this.entries = [{name:null, range:null}];
+				}
+				
 			}
 			this.rowEntry = null;
 			this.colEntry = null;
+		}
+		this.resetEntries = function(){
+			this.entries = [{name:null, range:null}];
+		}
+		this.addEntry = function(){
+			this.entries.push({name:null, range:null});
 		}
 		this.refreshImage = function(){
 			this.imagePath = this.imageInput;
