@@ -67,11 +67,11 @@
 			<p>For the animation range enter a location starting from the bottom left corner of the sprite. Index starts at 0. Enter as a range or comma separated. Eg: 2-10 or 0,1,3,12</p>
 		</div>
 		<div ng-repeat="entry in ac.entries" ng-show="ac.entriesAvailable" class="animation entry">
-			<p>Name: <input type="text" ng-model="entry.name" size="15" placeholder="Animation name."> Range: <input type="text" ng-model="entry.range" size="15" placeholder="Animation range."></p>
+			<p>Name: <input type="text" ng-model="entry.animName" size="15" placeholder="Animation name."> Range: <input type="text" ng-model="entry.range" size="15" placeholder="Animation range."></p>
 		</div>
 		
 		<div ng-repeat="entry in ac.entries" ng-show="ac.entriesAvailable" class="animation entry">
-			<p>{{entry.name}}: {{entry.range}}</p>
+			<p>{{entry.animName}}: {{entry.range}}</p>
 		</div>
 		<div class="output">
 			<textarea ng-show="ac.outputCreated" readonly="true" rows="5" cols="100">{{ac.output}}</textarea>
