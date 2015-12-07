@@ -15,6 +15,7 @@
 		this.entriesAvailable = entriesAvailable;
 		this.entries = entries;//list with name, # start, # end
 		this.imagePath = imagePath;
+		this.image = null;
 		this.output = "";
 		this.outputCreated = outputCreated;
 
@@ -41,6 +42,10 @@
 			}
 			this.rowEntry = null;
 			this.colEntry = null;
+			//Gets rendered image dimensions
+			/*var image = document.getElementById('mainImage'); 
+			var width = image.clientWidth;
+			var height = image.clientHeight;*/
 		}
 
 		//Reset the entries and also the output if there is any
@@ -58,6 +63,7 @@
 		//Change the image
 		this.refreshImage = function(){
 			this.imagePath = this.imageInput;
+			this.image = document.getElementById('mainImage');
 		}
 
 		//Reset the whole page
@@ -81,16 +87,15 @@
 		//alphanumeric name:                    {  decimal or integer number with comma after 3 times      number again } multiple times then ;
 		//(    [[:alnum:]]+   :         (     \\{    ([[:digit:]](.[[:digit:]]+)?,){3} [[:digit:]] (.[[:digit:]]+)?   \\}       )+      ;      )+
 		this.createOutput = function(){
-			var width = 1;
-			var height = 1;
+			var width = this.image.naturalWidth;
+			var height = this.image.naturalHeight;
 			var unitWidth = width/this.rows;
 			var unitHeight = height/this.cols;
 
 			var fullRange = new RegExp("^((\\d+)-(\\d+))$");
 			var csv = new RegExp("^((\\d+,)+\\d+)$");
-
-			console.log("Creating output...");
-			//TODO: Process the entries based on the output
+			
+			this.output = "";
 			this.outputCreated = true;
 			for(var entry of this.entries){
 				if(entry.animName == null && entry.tag == null){
@@ -98,20 +103,54 @@
 				}
 				//Entry uses a range
 				if(fullRange.test(entry.range)){
-					console.log("Range.");
+					//Split up the range at the hyphen
 					var temp = entry.range;
 					temp = temp.split('-');
+
 					var limit = parseInt(temp[1], 10);
-					this.output += entry.animName + ":{";
-					for(var i = parseInt(temp[0], 10); i < limit; i++){
-						//TODO: Create a UV set {x.x;x.x;x.x;x.x};
-						this.output += "}";
+
+					//Create the UV set output name:{x.x;x.x;x.x;x.x}; (UVminMax = {Umin, Umax, Vmin, Vmax})
+					this.output += entry.animName + ":";
+					var row = Math.floor(parseInt(temp[0], 10)/this.cols);
+					var col = parseInt(temp[0], 10) % this.cols;
+					for(var i = parseInt(temp[0], 10); i <= limit; i++){
+						//Increment the position of the current row and column
+						row = Math.floor(i/this.cols);
+						col = i % this.cols;
+
+						if(row > this.rows){
+							this.output = "Syntax error: invalid range for " + entry.animName + ", given: " + entry.range;
+							this.output += "\nOut of range values: current row is " + row + ", max rows is " + this.rows;
+						}
+						this.output += "{" + (unitWidth * col) + "," + (unitWidth * (col + 1)) + ",";
+						this.output += (unitHeight * row) + "," + (unitHeight * (row + 1)) + "}";
 					}
-					//this.output += "Range.\n";
+					this.output += ";";
+
 				//Entry is csv	
 				} else if (csv.test(entry.range)){
-					console.log("CSV.");
-					//TODO: Parse entry into a UV set
+					//Split up the range at the commas
+					var temp = entry.range;
+					temp = temp.split(',');
+
+					var row = 0;
+					var col = 0;
+					//Create the UV set output name:{x.x;x.x;x.x;x.x}; (UVminMax = {Umin, Umax, Vmin, Vmax})
+					this.output += entry.animName + ":";
+					for(var i of temp){
+						i = parseInt(i, 10);
+						col = i % this.cols;
+						row = Math.floor(i/this.cols);
+						if(row > this.rows){
+							this.output = "Syntax error: invalid range for " + entry.animName + ", given: " + entry.range;
+							this.output += "\nOut of range values: current row is " + row + ", max rows is " + this.rows;
+						}
+						this.output += "{" + (unitWidth * col) + "," + (unitWidth * (col + 1)) + ",";
+						this.output += (unitHeight * row) + "," + (unitHeight * (row + 1)) + "}";
+					}
+					this.output += ";";
+
+				//Entry is invalid
 				} else {
 					this.output = "Syntax error: invalid range for " + entry.animName + ", given: " + entry.range;
 					this.output += "\nExpected a number range or comma separated values. (e.g. a-d or a,c,d)";
