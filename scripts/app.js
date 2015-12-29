@@ -34,7 +34,7 @@
 			//If both rows and cols are valid then make entries visible
 			if(this.rowEntry > 0 && this.colEntry > 0){
 				//Init the entries list if it was previously unavailable
-				if(this.entriesAvailable == false){
+				if(this.entriesAvailable === false){
 					this.entriesAvailable = true;
 					this.entries = [{animName:null, range:null}];
 				}
@@ -46,25 +46,25 @@
 			/*var image = document.getElementById('mainImage'); 
 			var width = image.clientWidth;
 			var height = image.clientHeight;*/
-		}
+		};
 
 		//Reset the entries and also the output if there is any
 		this.resetEntries = function(){
 			this.entries = [{animName:null, range:null}];
 			this.output = "";
 			this.outputCreated = false;
-		}
+		};
 
 		//Add an empty entry
 		this.addEntry = function(){
 			this.entries.push({animName:null, range:null});
-		}
+		};
 
 		//Change the image
 		this.refreshImage = function(){
 			this.imagePath = this.imageInput;
 			this.image = document.getElementById('mainImage');
-		}
+		};
 
 		//Reset the whole page
 		this.resetPage = function(){
@@ -80,7 +80,7 @@
 			this.imageInput = imagePath;
 			this.rowEntry = null;
 			this.colEntry = null;
-		}
+		};
 
 		//Create the UV sets for display in the text area
 		//UV set output format as follows:
@@ -98,7 +98,7 @@
 			this.output = "";
 			this.outputCreated = true;
 			for(var entry of this.entries){
-				if(entry.animName == null && entry.tag == null){
+				if(entry.animName === null && entry.tag === null){
 					console.log("Null entry.");
 				}
 				//Entry uses a range
@@ -156,6 +156,6 @@
 					this.output += "\nExpected a number range or comma separated values. (e.g. a-d or a,c,d)";
 				}
 			}	
-		}
+		};
 	});
 })();
