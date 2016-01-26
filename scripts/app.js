@@ -89,11 +89,14 @@
 		this.createOutput = function(){
 			var width = this.image.naturalWidth;
 			var height = this.image.naturalHeight;
-			var unitWidth = width/this.rows;
-			var unitHeight = height/this.cols;
+			var unitWidth = width/this.cols;
+			var unitHeight = height/this.rows;
+			console.log(width)
+			console.log(height)
 
 			var fullRange = new RegExp("^((\\d+)-(\\d+))$");
 			var csv = new RegExp("^((\\d+,)+\\d+)$");
+			var single = new RegExp("^(\\d+)$")
 			
 			this.output = "";
 			this.outputCreated = true;
@@ -151,6 +154,13 @@
 					this.output += ";";
 
 				//Entry is invalid
+				} else if (single.test(entry.range)){
+					var i = parseInt(entry.range, 10);
+					var col = i % this.cols;
+					var row = Math.floor(i/this.cols);
+					this.output += entry.animName + ":";
+					this.output += "{" + (unitWidth * col) + "," + (unitWidth * (col + 1)) + ",";
+					this.output += (unitHeight * row) + "," + (unitHeight * (row + 1)) + "};";
 				} else {
 					this.output = "Syntax error: invalid range for " + entry.animName + ", given: " + entry.range;
 					this.output += "\nExpected a number range or comma separated values. (e.g. a-d or a,c,d)";

@@ -35,7 +35,7 @@
 			<table>
 				<tr>
 					<td>
-						Rows: {{ac.rows}} <input type="text" ng-model="ac.rowEntry" size="15" placeholder="Sprites in a row.">
+						Rows: {{ac.rows}} <input type="text" ng-model="ac.rowEntry" size="15" placeholder="Row count.">
 					</td>
 					<form ng-submit="ac.setDimensions()">
 						<td>
@@ -44,7 +44,7 @@
 					</form>
 					<tr>
 						<td>
-							Columns: {{ac.cols}} <input type="text" ng-model="ac.colEntry" size="15" placeholder="Sprites in a column.">
+							Columns: {{ac.cols}} <input type="text" ng-model="ac.colEntry" size="15" placeholder="Column count.">
 						</td>
 						<form ng-submit="ac.resetEntries()">
 							<td>
