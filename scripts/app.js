@@ -89,10 +89,8 @@
 		this.createOutput = function(){
 			var width = this.image.naturalWidth;
 			var height = this.image.naturalHeight;
-			var unitWidth = width/this.cols;
-			var unitHeight = height/this.rows;
-			console.log(width)
-			console.log(height)
+			var unitWidth = 1.0/this.cols;
+			var unitHeight = 1.0/this.rows;
 
 			var fullRange = new RegExp("^((\\d+)-(\\d+))$");
 			var csv = new RegExp("^((\\d+,)+\\d+)$");
